@@ -65,6 +65,7 @@ import Stage2 from "../game/stages/Stage2.js";
 import Stage3 from "../game/stages/Stage3.js";
 import Stage4 from "../game/stages/Stage4.js";
 import Stage5 from "../game/stages/Stage5.js";
+import audioManager from "../game/AudioManager.js";
 import {
   SPRITE_PLAYER_IDLE,
   SPRITE_PLAYER_IDLE_URL,
@@ -176,6 +177,7 @@ class GameplayScene {
   start() {
     window.addEventListener("keydown", this._boundKeyDown);
     this._player.start();
+    audioManager.playGameplayMusic();
     this._colliders = this._buildColliders();
     this._collectibles = this._spawnCollectibles();
     this._hazards = this._buildHazards();
@@ -273,7 +275,11 @@ class GameplayScene {
 
     // 14. Check collectibles
     for (let i = 0; i < this._collectibles.length; i++) {
+      const wasCollected = this._collectibles[i].collected;
       this._collectibles[i].update(dt, this._player);
+      if (!wasCollected && this._collectibles[i].collected && this._collectibles[i].type === COLLECTIBLE_COIN) {
+        audioManager.playCoin();
+      }
     }
 
     // 15. Check goal (only when boss is dead or no boss exists)
@@ -1252,6 +1258,7 @@ class GameplayScene {
         if (Math.abs(px - bx) < bossBounds.w / 2 + this._player.w / 2 - 10 &&
             Math.abs(py - by) < bossBounds.h / 2 + this._player.h / 2 - 10) {
           this._player.lives -= 1;
+          audioManager.playPlayerDeath();
           this._player.respawn();
           this._player._invincibleTimer = DAMAGE_INVINCIBILITY_TIME;
         }
@@ -1269,6 +1276,7 @@ class GameplayScene {
     if (!this._bossSlamActive || this._player._invincibleTimer > 0) return;
 
     this._player.lives -= 1;
+    audioManager.playPlayerDeath();
     this._player.respawn();
     this._player._invincibleTimer = DAMAGE_INVINCIBILITY_TIME;
   }
@@ -1333,6 +1341,7 @@ class GameplayScene {
         // respawning directly only when the player is not invincible.
         if (this._player._invincibleTimer <= 0) {
           this._player.lives -= 1;
+          audioManager.playPlayerDeath();
           this._player.respawn();
           this._player._invincibleTimer = DAMAGE_INVINCIBILITY_TIME;
         }
@@ -1436,6 +1445,7 @@ class GameplayScene {
       p.y + p.h > g.y
     ) {
       this._completed = true;
+      audioManager.playStageComplete();
     }
   }
 

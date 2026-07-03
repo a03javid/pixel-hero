@@ -33,6 +33,7 @@ import {
   GROUND_COLOR,
   GROUND_HIGHLIGHT_COLOR,
 } from "../game/constants.js";
+import audioManager from "../game/AudioManager.js";
 
 /**
  * Represents a rectangular region used for hit-testing a menu button.
@@ -95,6 +96,7 @@ class MenuScene {
     window.addEventListener("keydown", this._onKeyDown);
     this.canvas.addEventListener("mousemove", this._onMouseMove);
     this.canvas.addEventListener("click", this._onClick);
+    audioManager.playMenuMusic();
   }
 
   /** Remove event listeners. Call when leaving this scene. */

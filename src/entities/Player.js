@@ -41,6 +41,7 @@ import {
 } from "../game/constants.js";
 import SpriteLoader from "../game/SpriteLoader.js";
 import SpriteAnimator from "../game/SpriteAnimator.js";
+import audioManager from "../game/AudioManager.js";
 
 /**
  * Represents a rectangular axis-aligned collider in the level.
@@ -273,6 +274,7 @@ class Player {
     if (jump && this.grounded) {
       this.vy = PLAYER_JUMP_VELOCITY;
       this.grounded = false;
+      audioManager.playJump();
     }
 
     // Apply velocity to position
@@ -352,6 +354,7 @@ class Player {
   _checkFallReset() {
     if (this.y > PLAYER_FALL_THRESHOLD) {
       this.lives -= 1;
+      audioManager.playPlayerDeath();
       this.respawn();
     }
   }
@@ -371,6 +374,7 @@ class Player {
     for (let i = 0; i < hazards.length; i++) {
       if (this._overlap(hazards[i])) {
         this.lives -= 1;
+        audioManager.playPlayerDeath();
         this.respawn();
         this._invincibleTimer = DAMAGE_INVINCIBILITY_TIME;
         return;
@@ -393,6 +397,7 @@ class Player {
     for (let i = 0; i < enemies.length; i++) {
       if (this._overlap(enemies[i])) {
         this.lives -= 1;
+        audioManager.playPlayerDeath();
         this.respawn();
         this._invincibleTimer = DAMAGE_INVINCIBILITY_TIME;
         return;
