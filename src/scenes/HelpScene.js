@@ -29,6 +29,7 @@ import {
   BOTTOM_PROMPT_OFFSET,
   GOLD_COLOR,
 } from "../game/constants.js";
+import audioManager from "../game/AudioManager.js";
 
 /**
  * Help scene — displays game instructions in a retro pixel-art panel.
@@ -63,6 +64,7 @@ class HelpScene {
   /** Attach input listeners. */
   start() {
     window.addEventListener("keydown", this._onKeyDown);
+    audioManager.playMenuMusic();
   }
 
   /** Detach input listeners. */

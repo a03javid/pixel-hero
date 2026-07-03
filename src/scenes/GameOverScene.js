@@ -4,6 +4,7 @@ import {
   FONT_FAMILY,
   SCENE_MENU,
 } from "../game/constants.js";
+import audioManager from "../game/AudioManager.js";
 
 /**
  * Game Over screen shown when the player loses all lives.
@@ -46,6 +47,8 @@ class GameOverScene {
   /** Attach input listeners. */
   start() {
     window.addEventListener("keydown", this._onKeyDown);
+    audioManager.stopMusic();
+    audioManager.playGameOver();
   }
 
   /** Detach input listeners. */

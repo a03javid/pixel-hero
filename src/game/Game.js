@@ -14,6 +14,7 @@ import GameOverScene from "../scenes/GameOverScene.js";
 import VictoryScene from "../scenes/VictoryScene.js";
 import HelpScene from "../scenes/HelpScene.js";
 import CreditsScene from "../scenes/CreditsScene.js";
+import audioManager from "./AudioManager.js";
 
 /**
  * Minimal game runner.
@@ -55,7 +56,8 @@ class Game {
   }
 
   /** Start the requestAnimationFrame loop and attach scene listeners. */
-  start() {
+  async start() {
+    await audioManager.preload();
     this._scene.start();
     this._lastTime = performance.now();
     this._rafId = requestAnimationFrame(this._loop);
